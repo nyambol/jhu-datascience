@@ -1,5 +1,7 @@
 ## JHU Data Science Program - Coursera
 
-This repository represents code and working files from JHU Data Science Program on Coursera.  At this time, data from "Toolbox" and "R Programming" Courses can be found here.
+*Time-stamp: <2015-09-13 16:38:45 powem>*
 
-*Last modified: 13 Sept 2015*
+This repository represents code and working files from JHU Data
+Science Program on Coursera.  At this time, data from "Toolbox" and "R
+Programming" Courses can be found here.
