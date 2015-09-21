@@ -17,3 +17,5 @@
 vignettes/*.html
 vignettes/*.pdf
 
+# sample files
+specdata
