@@ -97,5 +97,7 @@ getspecdata<-function(filelist){
   
   
 }
-
+reader <- function(x) {
+        read.csv(file = x, header = TRUE)
+}
 
