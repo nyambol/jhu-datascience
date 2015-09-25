@@ -5,25 +5,27 @@
 g_specdata <- "~/src/jhu_data_science/specdata"
 
 # (global) files collection
-g_specdatadir <- dir(g_specdata,pattern = "\\d{3}\\.csv",full.names = TRUE)
+g_specdata_dir <- dir(g_specdata,pattern = "\\d{3}\\.csv",full.names = TRUE)
 
 # helper function to read in data files and create a single data frame
 getspecdata <- function(filelistdir) {
         # set the vectors and frames to NULL, just to be safe
-        tempspecdata <- NULL
-        tempspecdatalist <- NULL
-        tempspecdataframe <- NULL
+        temp_specdata <- NULL
+        temp_specdata_list <- NULL
+        temp_specdata_frame <- NULL
         
         # read in the data
         # this creates a list of data frames, one for each file
-        tempspecdatalist <- lapply(filelistdir, read.csv)
+        temp_specdata_list <- lapply(filelistdir, read.csv)
         
         # binds all the data frames in the list into a single frame
-        tempspecdataframe <- do.call("rbind", tempspecdatalist)
+        temp_specdata_frame <- do.call("rbind", temp_specdata_list)
 }
 
-gsd<-getspecdata(g_specdatadir)
+gsd<-getspecdata(g_specdata_dir)
 g_compdata<-complete.cases(gsd)
+
+
 
 # =============================================================================
 
@@ -37,11 +39,12 @@ g_compdata<-complete.cases(gsd)
 # follows
 
 pollutantmean <- function(directory, pollutant, stations) {
-        specdatadir <- dir(directory,pattern = "\\d{3}\\.csv",full.names = TRUE)
+        specdata_dir <- dir(directory,pattern = "\\d{3}\\.csv",full.names = TRUE)
         
-        specdataframe<-getspecdata(specdatadir)
-        compcases<-complete.cases(specdataframe)
-        specdataframeclean<-specdataframe[compcases,]
+        specdata_frame<-getspecdata(specdata_dir)
+        compcases<-complete.cases(specdata_frame)
+        specdata_frameclean<-specdata_frame[compcases,]
+        
 }
 
 p<-pollutantmean(g_specdata,'nitrate',c(6,21:26))
@@ -69,6 +72,35 @@ complete <- function(directory, id = 1:332) {
   ## where 'id' is the monitor ID number and 'nobs' is the
   ## number of complete cases
 }
+# c[1:6,'ID' = 3:6]
+# c[1:6,'ID' == 3:6]
+# c[c$ID==6]
+# c[c$ID==8]
+# c[c$ID==1]
+# c[c$ID]
+# c$ID
+# c[c$ID==29]
+# str(c)
+# c[c$ID==29,]
+# c['ID' = 3:6,]
+# c['ID' == 3:6,]
+# c['ID' == 29,]
+# c[c$ID==29,]
+# c[c$ID==28:29,]
+# c[c$ID==c(6,28:29),]
+# c['ID'==c(6,28:29),]
+# c['ID'==c(6,28:29)]
+# c[,'ID'==c(6,28:29)]
+# c[c$ID==c(6,28:29),]
+# d<-c[c$ID==c(6,28:29),]
+# str(d)
+# mean(d)
+# class(d)
+# dim(d)
+# d.length
+# (lapply(d,mean))
+# (lapply(d$nitrate,mean))
+
 
 # =============================================================================
 
