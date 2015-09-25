@@ -38,68 +38,62 @@ g_compdata<-complete.cases(gsd)
 # ignoring any missing values coded as NA. A prototype of the function is as
 # follows
 
+# A function to calculate the mean for a subset of data observations from a collection
+# of observation stations.
+# Parameters:
+#   directory - a string specifying the path to the data files
+#   pollutant - a string specifying which pollutant is being measured. Options are
+#               'nitrate' or 'sulfate'
+#   stations -  ID numbers of the stations to be processed.  This is a vector of numbers
+#               between 1 and 332. 
+# Usage: 
+#   pmean<-pollutantmean("~/src/jhu_data_science/specdata","nitrate",c(6,26))
+#   *** calculate the mean for the observations of 'nitrate' for stations 6 and 26
+#
+#   pmean<-pollutantmean("~/src/jhu_data_science/specdata","sulfate",13:21)
+#   *** calculate the mean for the observations of 'sulfate' for stations 13 through 21
+
 pollutantmean <- function(directory, pollutant, stations) {
+  
+        # simple sanity checks for input
+        if(file.exists(directory) == FALSE){
+          stop("Directory given does not exist or is not accessible")
+        }
+        else if(pollutant != 'nitrate' && pollutant != 'sulfate'){
+          stop("Please select either 'nitrate' or 'sulfate' for pollutant.")
+        }
+        else if(is.vector(stations) == FALSE){
+          stop("Station ID numbers must be given as a vector")
+        }
+        
+        # build the vector of data files  
         specdata_dir <- dir(directory,pattern = "\\d{3}\\.csv",full.names = TRUE)
         
+        # create a data frame from the data in the files
+        # using the helper function
         specdata_frame<-getspecdata(specdata_dir)
-        compcases<-complete.cases(specdata_frame)
-        specdata_frameclean<-specdata_frame[compcases,]
         
+        # logical vector identifying incomplete data
+        isgood<-complete.cases(specdata_frame)
+        
+        # data frame with NA values stripped out
+        specdata_clean<-specdata_frame[isgood,]
+        
+        # data frame with specified station IDs
+        specdata_select<-specdata_clean[ specdata_clean[['ID']] == stations, ]
+        
+        # calcultate the mean of the selected observations
+        mean(specdata_select[,pollutant])
 }
 
-p<-pollutantmean(g_specdata,'nitrate',c(6,21:26))
+p<-pollutantmean(g_specdata,'sulfate',3)
 
-# =============================================================================
+# ---------Notes--------------------
+isgood<-complete.cases(p)
+clean_specdata<-p[isgood,]
+s<-cl_specdata[ cl_specdata[['ID']] == 3:6, ]
 
-# Write a function that reads a directory full of files and reports the number
-# of completely observed cases in each data file. The function should return a
-# data frame where the first column is the name of the file and the second
-# column is the number of complete cases. 
-# A prototype of this function follows
-
-complete <- function(directory, id = 1:332) {
-  ## 'directory' is a character vector of length 1 indicating
-  ## the location of the CSV files
-  
-  ## 'id' is an integer vector indicating the monitor ID numbers
-  ## to be used
-  
-  ## Return a data frame of the form:
-  ## id nobs
-  ## 1  117
-  ## 2  1041
-  ## ...
-  ## where 'id' is the monitor ID number and 'nobs' is the
-  ## number of complete cases
-}
-# c[1:6,'ID' = 3:6]
-# c[1:6,'ID' == 3:6]
-# c[c$ID==6]
-# c[c$ID==8]
-# c[c$ID==1]
-# c[c$ID]
-# c$ID
-# c[c$ID==29]
-# str(c)
-# c[c$ID==29,]
-# c['ID' = 3:6,]
-# c['ID' == 3:6,]
-# c['ID' == 29,]
-# c[c$ID==29,]
-# c[c$ID==28:29,]
-# c[c$ID==c(6,28:29),]
-# c['ID'==c(6,28:29),]
-# c['ID'==c(6,28:29)]
-# c[,'ID'==c(6,28:29)]
-# c[c$ID==c(6,28:29),]
-# d<-c[c$ID==c(6,28:29),]
-# str(d)
-# mean(d)
-# class(d)
-# dim(d)
-# d.length
-# (lapply(d,mean))
-# (lapply(d$nitrate,mean))
+# ----------------------------------
 
 
 # =============================================================================
@@ -126,3 +120,38 @@ corr <- function(directory, threshold = 0) {
   ## NOTE: Do not round the result!
 }
 
+# Write a function that reads a directory full of files and reports the number
+# of completely observed cases in each data file. The function should return a
+# data frame where the first column is the name of the file and the second
+# column is the number of complete cases. 
+# A prototype of this function follows
+
+## 'directory' is a character vector of length 1 indicating
+## the location of the CSV files
+
+## 'id' is an integer vector indicating the monitor ID numbers
+## to be used
+
+## Return a data frame of the form:
+## id nobs
+## 1  117
+## 2  1041
+## ...
+## where 'id' is the monitor ID number and 'nobs' is the
+## number of complete cases
+
+complete <- function(directory, id = 1:332) {
+        
+        # build the vector of data files  
+        specdata_dir <- dir(directory,pattern = "\\d{3}\\.csv",full.names = TRUE)
+        
+        # create a data frame from the data in the files
+        # using the helper function
+        specdata_frame<-getspecdata(specdata_dir)
+        
+        # logical vector identifying incomplete data
+        isgood<-complete.cases(specdata_frame)
+        
+        # data frame with NA values stripped out
+        specdata_clean<-specdata_frame[isgood,]
+}
