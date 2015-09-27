@@ -2,30 +2,38 @@
 # R Programming, Assignment 2
 # 27 Sept 2015
 # 
-# 
-# 
-# 
-# 
+# Two functions to be used in tandem. 
 # 
 
-# Create matrix mx using rnorm
+# Test process
+# Create matrix 'mx' using rnorm
 # Matrix must be square and det(matrix) != 0
-# Make a caching version of the matrix, mx_c, with makeCacheMatrix
+# Make a caching version of the matrix, 'mx_c', with makeCacheMatrix
 # 
-# Cache the inverse, mx_c_i, of mx_c with cacheSolve
-# The first time mx_c_i is created, there should be no message from cacheSolve
+# Cache the inverse, 'mx_c_i', of 'mx_c' with cacheSolve
+# The first time 'mx_c_i' is created, there should be no message from cacheSolve
 # After that, "getting cached data" should appear
 # 
 
-## Put comments here that give an overall description of what your
-## functions do
+# mx <- matrix(rnorm(36), nrow = 6, ncol = 6 )
+# det(mx)
+# mx_c <- makeCacheMatrix(mx)
+# mx_c_i <- cacheSolve(mx_c)
 
-## Write a short comment describing this function
-
+# makeCacheMatrix creates an object (a list) that consists of a square matrix and 
+# four functions to manipulate it. 
+# makeCacheMatrix will throw an exception and exit if the input matrix is not square.
+# 
 makeCacheMatrix <- function(mat = matrix()) {
+        if(ncol(mat) != nrow(mat)){
+                stop("Must be a square matrix.")
+        }
+                
         inversecache <- NULL
         set <- function(newmatrix) {
                 mat <<- newmatrix
+                # if the caching function has been run previously on
+                # a different matrix, kill the cache
                 inversecache <<- NULL
         }
         get <- function() {
@@ -42,11 +50,15 @@ makeCacheMatrix <- function(mat = matrix()) {
              getinverse = getinverse)
 }
 
-
-## Write a short comment describing this function
-
+# cacheSolve uses the object created by makeCacheMatrix. If the matrix 
+# is 'singular,' that is, a matrix with a determinant of zero, the function
+# will throw an exception and exit.  You cannot take the inverse of a 
+# singular matrix.
+#
 cacheSolve <- function(cachingMatrix, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        
+        # cachingMatrix was created by makeCacheMatrix
+        # (It's really a list with a matrix as one element.)
         inversecache <- cachingMatrix$getinverse()
         if(!is.null(inversecache)) {
                 message("getting cached data")
