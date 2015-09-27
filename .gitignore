@@ -7,17 +7,14 @@
 .Rhistory
 .Rapp.history
 .RData
-
 # Example code in package build process
 *-Ex.R
-
 # RStudio files
 .Rproj.user/
-
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
-
 # sample files
 specdata
 .Rproj.user
+testcache.R
